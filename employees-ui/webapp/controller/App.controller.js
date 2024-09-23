@@ -23,7 +23,7 @@ sap.ui.define(
         var oModel = this.getView().getModel("employeeModel");
 
         fetch(
-          "http://localhost:4004/odata/v4/catalog/Employees?$expand=location,category"
+          "/odata/v4/Employees?$expand=location,category"
         )
           .then((res) => res.json())
           .then((data) => {
@@ -50,7 +50,7 @@ sap.ui.define(
 
       _deleteEmployee: function (employeeId) {
         fetch(
-          `http://localhost:4004/odata/v4/catalog/Employees(${employeeId})`,
+          `/odata/v4/Employees(${employeeId})`,
           {
             method: "DELETE",
           }
@@ -125,7 +125,7 @@ sap.ui.define(
         var oModel = this._oDialog.getModel();
         var updatedData = oModel.getData();
 
-        fetch(`http://localhost:4004/odata/v4/catalog/Employees(${employeeId})`, {
+        fetch(`/odata/v4/Employees(${employeeId})`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
