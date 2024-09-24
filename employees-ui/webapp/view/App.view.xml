@@ -8,19 +8,19 @@
         items="{employeeModel>/value}">
         <columns>
             <Column>
-                <Text text="Name"/>
+                <Text text="{i18n>name}"/>
             </Column>
             <Column>
-                <Text text="Location"/>
+                <Text text="{i18n>location}"/>
             </Column>
             <Column>
-                <Text text="Category"/>
+                <Text text="{i18n>category}"/>
             </Column>
             <Column>
-                <Text text="Modify"/>
+                <Text text="{i18n>modify}"/>
             </Column>
             <Column>
-                <Text text="Delete"/>
+                <Text text="{i18n>delete}"/>
             </Column>
         </columns>
         <items>

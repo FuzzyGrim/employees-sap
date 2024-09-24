@@ -7,8 +7,18 @@ sap.ui.define(
     "sap/m/Button",
     "sap/m/Label",
     "sap/m/Input",
+    "sap/ui/model/resource/ResourceModel",
   ],
-  function (Controller, JSONModel, MessageBox, Dialog, Button, Label, Input) {
+  function (
+    Controller,
+    JSONModel,
+    MessageBox,
+    Dialog,
+    Button,
+    Label,
+    Input,
+    ResourceModel
+  ) {
     "use strict";
 
     return Controller.extend("ui.quickstart.controller.EmployeeList", {
@@ -17,6 +27,11 @@ sap.ui.define(
         this.getView().setModel(oModel, "employeeModel");
 
         this._loadEmployeeData();
+
+        const i18nModel = new ResourceModel({
+          bundleName: "ui5.quickstart.i18n.i18n",
+        });
+        this.getView().setModel(i18nModel, "i18n");
       },
 
       _loadEmployeeData: function () {
@@ -73,24 +88,25 @@ sap.ui.define(
           .find((e) => e.ID === employeeId);
 
         if (!this._oDialog) {
+          const oBundle = this.getView().getModel("i18n").getResourceBundle();
           this._oDialog = new Dialog({
             title: "Modify Employee",
             content: [
-              new Label({ text: "Name" }),
+              new Label({ text: oBundle.getText("name") }),
               new Input({ value: "{/name}" }),
-              new Label({ text: "Location" }),
+              new Label({ text: oBundle.getText("location") }),
               new Input({ value: "{/location/title}" }),
-              new Label({ text: "Category" }),
+              new Label({ text: oBundle.getText("category") }),
               new Input({ value: "{/category/title}" }),
-              new Label({ text: "Photo" }),
+              new Label({ text: oBundle.getText("photo") }),
               new Input({ value: "{/photo}" }),
-              new Label({ text: "Age" }),
+              new Label({ text: oBundle.getText("age") }),
               new Input({ value: "{/age}", type: "Number" }),
-              new Label({ text: "Salary" }),
+              new Label({ text: oBundle.getText("salary") }),
               new Input({ value: "{/salary}", type: "Number" }),
-              new Label({ text: "City" }),
+              new Label({ text: oBundle.getText("city") }),
               new Input({ value: "{/city}" }),
-              new Label({ text: "Address" }),
+              new Label({ text: oBundle.getText("address") }),
               new Input({ value: "{/address}" }),
             ],
             beginButton: new Button({
