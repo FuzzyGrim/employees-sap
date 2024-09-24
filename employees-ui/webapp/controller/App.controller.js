@@ -6,7 +6,7 @@ sap.ui.define(
     "sap/m/Dialog",
     "sap/m/Button",
     "sap/m/Label",
-    "sap/m/Input"
+    "sap/m/Input",
   ],
   function (Controller, JSONModel, MessageBox, Dialog, Button, Label, Input) {
     "use strict";
@@ -22,9 +22,7 @@ sap.ui.define(
       _loadEmployeeData: function () {
         var oModel = this.getView().getModel("employeeModel");
 
-        fetch(
-          "/odata/v4/Employees?$expand=location,category"
-        )
+        fetch("/odata/v4/Employees?$expand=location,category")
           .then((res) => res.json())
           .then((data) => {
             oModel.setData(data);
@@ -49,12 +47,9 @@ sap.ui.define(
       },
 
       _deleteEmployee: function (employeeId) {
-        fetch(
-          `/odata/v4/Employees(${employeeId})`,
-          {
-            method: "DELETE",
-          }
-        )
+        fetch(`/odata/v4/Employees(${employeeId})`, {
+          method: "DELETE",
+        })
           .then((response) => {
             if (response.ok) {
               // Refresh the data after successful deletion
@@ -120,31 +115,130 @@ sap.ui.define(
         this._oDialog.open();
       },
 
-
-      _updateEmployee: function(employeeId) {
+      _updateEmployee: function (employeeId) {
         var oModel = this._oDialog.getModel();
         var updatedData = oModel.getData();
+        console.log(updatedData);
 
-        fetch(`/odata/v4/Employees(${employeeId})`, {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(updatedData)
-        })
-        .then(response => {
-            if (response.ok) {
-                this._loadEmployeeData();
-                MessageBox.success("Employee updated successfully");
-            } else {
-                throw new Error('Update operation failed');
+        // Prepare the main employee update
+        var employeeUpdate = {
+          name: updatedData.name,
+          photo: updatedData.photo,
+          age: updatedData.age,
+          salary: updatedData.salary,
+          City: updatedData.City,
+          Adress: updatedData.Adress,
+        };
+
+        // Start with updating the employee
+        this._updateEmployeeMain(employeeId, employeeUpdate)
+          .then(() => {
+            // If location changed, update or create new location
+            if (updatedData.location && updatedData.location.title) {
+              return this._updateOrCreateLocation(
+                employeeId,
+                updatedData.location.title
+              );
             }
-        })
-        .catch(error => {
+          })
+          .then(() => {
+            // If category changed, update or create new category
+            if (updatedData.category && updatedData.category.title) {
+              return this._updateOrCreateCategory(
+                employeeId,
+                updatedData.category.title
+              );
+            }
+          })
+          .then(() => {
+            this._loadEmployeeData();
+            MessageBox.success("Employee updated successfully");
+          })
+          .catch((error) => {
             console.error("Error updating employee:", error);
             MessageBox.error("Failed to update employee");
+          });
+      },
+
+      _updateEmployeeMain: function (employeeId, data) {
+        return fetch(`/odata/v4/Employees(${employeeId})`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }).then((response) => {
+          if (!response.ok) throw new Error("Update operation failed");
         });
-    }
+      },
+
+      _updateOrCreateLocation: function (employeeId, locationTitle) {
+        // First, search for existing location with the same title
+        return fetch(
+          `/odata/v4/Locations?$filter=title eq '${encodeURIComponent(
+            locationTitle
+          )}'`
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.value && data.value.length > 0) {
+              // Location exists, use its ID
+              return this._updateEmployeeMain(employeeId, {
+                location_ID: data.value[0].ID,
+              });
+            } else {
+              // Location doesn't exist, create new one
+              return fetch("/odata/v4/Locations", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ title: locationTitle }),
+              })
+                .then((response) => response.json())
+                .then((data) => {
+                  // Link new location to employee
+                  return this._updateEmployeeMain(employeeId, {
+                    location_ID: data.results[0].lastInsertRowid,
+                  });
+                });
+            }
+          });
+      },
+
+      _updateOrCreateCategory: function (employeeId, categoryTitle) {
+        // First, search for existing category with the same title
+        return fetch(
+          `/odata/v4/Categories?$filter=title eq '${encodeURIComponent(
+            categoryTitle
+          )}'`
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.value && data.value.length > 0) {
+              // Category exists, use its ID
+              return this._updateEmployeeMain(employeeId, {
+                category_ID: data.value[0].ID,
+              });
+            } else {
+              // Category doesn't exist, create new one
+              return fetch("/odata/v4/Categories", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ title: categoryTitle }),
+              })
+                .then((response) => response.json())
+                .then((data) => {
+                  // Link new category to employee
+                  return this._updateEmployeeMain(employeeId, {
+                    category_ID: data.results[0].lastInsertRowid,
+                  });
+                });
+            }
+          });
+      },
     });
   }
 );

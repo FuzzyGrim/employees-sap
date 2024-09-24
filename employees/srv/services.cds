@@ -1,7 +1,7 @@
 using my.employees as my from '../db/schema';
 
-service CatalogService {
+service Service {
   entity Employees as projection on my.Employees;
-  entity Locations @readonly as projection on my.Locations;
-  entity Categories @insertonly as projection on my.Categories;
+  entity Locations as projection on my.Locations;
+  entity Categories as projection on my.Categories;
 }
