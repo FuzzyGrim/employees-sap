@@ -1,25 +1,29 @@
-sap.ui.define(
-  ["sap/ui/core/UIComponent", "sap/ui/model/json/JSONModel"],
-  function (UIComponent, JSONModel) {
-    "use strict";
+sap.ui.define([
+  "sap/ui/core/UIComponent",
+  "sap/ui/model/json/JSONModel",
+  "sap/ui/model/resource/ResourceModel"
+], (UIComponent, JSONModel, ResourceModel) => {
+  "use strict";
 
-    return UIComponent.extend("ui.quickstart.Component", {
-      metadata: {
-        manifest: "json",
-      },
+  return UIComponent.extend("ui5.quickstart.Component", {
+     metadata : {
+        "interfaces": ["sap.ui.core.IAsyncContentCreation"],
+        "rootView": {
+           "viewName": "ui5.quickstart.view.App",
+           "type": "XML",
+           "id": "app"
+        }
+     },
 
-      init: function () {
-        var i18nModel = new sap.ui.model.resource.ResourceModel({
-          bundleUrl: "i18n/i18n.properties",
-        });
-        sap.ui.getCore().setModel(i18nModel, "i18n");
-
-        // call the base component's init function
+     init() {
+        // call the init function of the parent
         UIComponent.prototype.init.apply(this, arguments);
 
-        // create the views based on the url/hash
-        this.getRouter().initialize();
-      },
-    });
-  }
-);
+        // set i18n model
+        const i18nModel = new ResourceModel({
+           bundleName: "ui5.quickstart.i18n.i18n"
+        });
+        this.setModel(i18nModel, "i18n");
+     }
+  });
+});

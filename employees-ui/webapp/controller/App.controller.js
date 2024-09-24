@@ -7,31 +7,15 @@ sap.ui.define(
     "sap/m/Button",
     "sap/m/Label",
     "sap/m/Input",
-    "sap/ui/model/resource/ResourceModel",
   ],
-  function (
-    Controller,
-    JSONModel,
-    MessageBox,
-    Dialog,
-    Button,
-    Label,
-    Input,
-    ResourceModel
-  ) {
+  function (Controller, JSONModel, MessageBox, Dialog, Button, Label, Input) {
     "use strict";
 
     return Controller.extend("ui.quickstart.controller.EmployeeList", {
       onInit: function () {
         var oModel = new JSONModel();
         this.getView().setModel(oModel, "employeeModel");
-
         this._loadEmployeeData();
-
-        const i18nModel = new ResourceModel({
-          bundleName: "ui5.quickstart.i18n.i18n",
-        });
-        this.getView().setModel(i18nModel, "i18n");
       },
 
       _loadEmployeeData: function () {
