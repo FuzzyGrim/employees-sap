@@ -3,12 +3,8 @@ sap.ui.define(
       "sap/ui/core/mvc/Controller",
       "sap/ui/model/json/JSONModel",
       "sap/m/MessageBox",
-      "sap/m/Dialog",
-      "sap/m/Button",
-      "sap/m/Label",
-      "sap/m/Input",
     ],
-    function (Controller, JSONModel, MessageBox, Dialog, Button, Label, Input) {
+  function (Controller, JSONModel, MessageBox) {
       "use strict";
   
       return Controller.extend("ui.quickstart.controller.EmployeesPanel", {
@@ -64,56 +60,30 @@ sap.ui.define(
             });
         },
   
-        onEditPress: function (oEvent) {
+      onEditPress: async function (oEvent) {
           var employeeId = oEvent.getSource().data("employeeId");
           var oModel = this.getView().getModel("employeeModel");
           var employee = oModel
             .getProperty("/value")
             .find((e) => e.ID === employeeId);
   
-          if (!this._oDialog) {
-            const oBundle = this.getView().getModel("i18n").getResourceBundle();
-            this._oDialog = new Dialog({
-              title: "Modify Employee",
-              content: [
-                new Label({ text: oBundle.getText("name") }),
-                new Input({ value: "{/name}" }),
-                new Label({ text: oBundle.getText("location") }),
-                new Input({ value: "{/location/title}" }),
-                new Label({ text: oBundle.getText("category") }),
-                new Input({ value: "{/category/title}" }),
-                new Label({ text: oBundle.getText("photo") }),
-                new Input({ value: "{/photo}" }),
-                new Label({ text: oBundle.getText("age") }),
-                new Input({ value: "{/age}", type: "Number" }),
-                new Label({ text: oBundle.getText("salary") }),
-                new Input({ value: "{/salary}", type: "Number" }),
-                new Label({ text: oBundle.getText("city") }),
-                new Input({ value: "{/city}" }),
-                new Label({ text: oBundle.getText("address") }),
-                new Input({ value: "{/address}" }),
-              ],
-              beginButton: new Button({
-                text: "Save",
-                press: function () {
-                  this._updateEmployee(employeeId);
-                  this._oDialog.close();
-                }.bind(this),
-              }),
-              endButton: new Button({
-                text: "Cancel",
-                press: function () {
-                  this._oDialog.close();
-                }.bind(this),
-              }),
-            });
-  
-            this.getView().addDependent(this._oDialog);
-          }
+        this._oDialog ??= await this.loadFragment({
+          name: "ui5.quickstart.view.EmployeesDialog",
+        });
   
           this._oDialog.setModel(new JSONModel(employee));
           this._oDialog.open();
         },
+
+      onCancelDialogPress: function () {
+        this._oDialog.close();
+      },
+
+      onSaveDialogPress: function (oEvent) {
+        var employeeId = oEvent.getSource().data("employeeId");
+        this._updateEmployee(employeeId);
+        this._oDialog.close();
+      },
   
         _updateEmployee: function (employeeId) {
           var oModel = this._oDialog.getModel();
