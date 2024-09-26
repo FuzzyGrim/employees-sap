@@ -10,7 +10,19 @@
     </headerToolbar>
 
     <content>
-      <Table items="{employeeModel>/value}">
+      <Table id="employeesTable" items="{
+              path : 'employeeModel>/value',
+              sorter : {
+                  path : 'name' 
+              }
+            }">
+        <headerToolbar>
+          <Toolbar>
+            <Title text="{i18n>data}"/>
+            <ToolbarSpacer/>
+            <SearchField width="50%" search=".onFilterEmployees" showRefreshButton="true"/>
+          </Toolbar>
+        </headerToolbar>
         <columns>
           <Column hAlign="Center">
             <Text text="{i18n>name}"/>

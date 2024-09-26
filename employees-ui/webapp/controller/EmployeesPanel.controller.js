@@ -3,8 +3,10 @@ sap.ui.define(
     "sap/ui/core/mvc/Controller",
     "sap/ui/model/json/JSONModel",
     "sap/m/MessageBox",
+    "sap/ui/model/Filter",
+    "sap/ui/model/FilterOperator",
   ],
-  function (Controller, JSONModel, MessageBox) {
+  function (Controller, JSONModel, MessageBox, Filter, FilterOperator) {
     "use strict";
 
     return Controller.extend("ui.quickstart.controller.EmployeesPanel", {
@@ -70,7 +72,7 @@ sap.ui.define(
           .getProperty("/value")
           .find((e) => e.ID === employeeId);
 
-          this._oDialog ??= await this.loadFragment({
+        this._oDialog ??= await this.loadFragment({
           name: "ui5.quickstart.view.EmployeesDialog",
         });
         this._oDialog.setModel(new JSONModel(employee), "employee");
@@ -210,6 +212,22 @@ sap.ui.define(
                 });
             }
           });
+      },
+
+      onFilterEmployees: function (oEvent) {
+        // build filter array
+        const aFilter = [];
+        const sQuery = oEvent.getParameter("query");
+        if (sQuery) {
+          aFilter.push(
+            new Filter("name", FilterOperator.Contains, sQuery)
+          );
+        }
+
+        // filter binding
+        const oList = this.byId("employeesTable");
+        const oBinding = oList.getBinding("items");
+        oBinding.filter(aFilter);
       },
     });
   }
