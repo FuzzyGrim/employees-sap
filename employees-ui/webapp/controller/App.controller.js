@@ -11,7 +11,7 @@ sap.ui.define(
   function (Controller, JSONModel, MessageBox, Dialog, Button, Label, Input) {
     "use strict";
 
-    return Controller.extend("ui.quickstart.controller.EmployeeList", {
+    return Controller.extend("ui.quickstart.controller.App", {
       onInit: function () {
         var oModel = new JSONModel();
         this.getView().setModel(oModel, "employeeModel");
