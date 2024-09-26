@@ -8,8 +8,8 @@ entity Employees {
       photo    : String;
       age      : UInt8;
       salary   : Integer;
-      City     : String;
-      Adress   : String;
+      city     : String;
+      address   : String;
 }
 
 @assert.unique: {isbn: [title]}

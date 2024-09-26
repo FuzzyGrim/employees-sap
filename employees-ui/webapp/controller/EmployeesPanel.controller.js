@@ -70,11 +70,10 @@ sap.ui.define(
           .getProperty("/value")
           .find((e) => e.ID === employeeId);
 
-        this._oDialog ??= await this.loadFragment({
+          this._oDialog ??= await this.loadFragment({
           name: "ui5.quickstart.view.EmployeesDialog",
         });
-
-        this._oDialog.setModel(new JSONModel(employee));
+        this._oDialog.setModel(new JSONModel(employee), "employee");
         this._oDialog.open();
       },
 
@@ -99,8 +98,8 @@ sap.ui.define(
           photo: updatedData.photo,
           age: updatedData.age,
           salary: updatedData.salary,
-          City: updatedData.City,
-          Adress: updatedData.Adress,
+          city: updatedData.city,
+          address: updatedData.address,
         };
 
         // Start with updating the employee
