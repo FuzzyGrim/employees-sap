@@ -2,8 +2,7 @@
   xmlns="sap.m"
   xmlns:mvc="sap.ui.core.mvc" displayBlock="true">
   <Shell>
-    <App class="app">
-      <mvc:XMLView viewName="ui5.quickstart.view.EmployeesPanel"/>
+    <App class="app" id="app">
     </App>
   </Shell>
 </mvc:View>

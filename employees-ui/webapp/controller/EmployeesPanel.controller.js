@@ -29,6 +29,11 @@ sap.ui.define(
           });
       },
 
+      onPress: function() {
+        const oRouter = this.getOwnerComponent().getRouter();
+        oRouter.navTo("detail");
+      },
+
       onDeletePress: function (oEvent) {
         var employeeId = oEvent.getSource().data("employeeId");
         var that = this;
