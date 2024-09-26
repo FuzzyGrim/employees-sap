@@ -1,56 +1,62 @@
 <mvc:View controllerName="ui5.quickstart.controller.App"
   xmlns="sap.m"
   xmlns:mvc="sap.ui.core.mvc"
-  xmlns:core="sap.ui.core"
-  xmlns:html="http://www.w3.org/1999/xhtml" displayBlock="true">
+  xmlns:core="sap.ui.core" displayBlock="true">
   <Shell>
-    <App>
+    <App class="app">
       <!-- <pages>
         <Page title="{i18n>appTitle}">
           <content> -->
-            <Panel headerText="{i18n>appTitle}" class="sapUiResponsiveMargin" width="auto">
-              <content>
-                <Table items="{employeeModel>/value}">
-                  <columns>
-                    <Column>
-                      <Text text="{i18n>name}"/>
-                    </Column>
-                    <Column>
-                      <Text text="{i18n>location}"/>
-                    </Column>
-                    <Column>
-                      <Text text="{i18n>category}"/>
-                    </Column>
-                    <Column>
-                      <Text text="{i18n>modify}"/>
-                    </Column>
-                    <Column>
-                      <Text text="{i18n>delete}"/>
-                    </Column>
-                  </columns>
-                  <items>
-                    <ColumnListItem>
-                      <cells>
-                        <Text text="{employeeModel>name}"/>
-                        <Text text="{employeeModel>location/title}"/>
-                        <Text text="{employeeModel>category/title}"/>
-                        <Button icon="sap-icon://edit" press=".onEditPress">
-                          <customData>
-                            <core:CustomData key="employeeId" value="{employeeModel>ID}" />
-                          </customData>
-                        </Button>
-                        <Button icon="sap-icon://delete" press=".onDeletePress">
-                          <customData>
-                            <core:CustomData key="employeeId" value="{employeeModel>ID}" />
-                          </customData>
-                        </Button>
-                      </cells>
-                    </ColumnListItem>
-                  </items>
-                </Table>
-              </content>
-            </Panel>
-          <!-- </content>
+
+      <Panel class="sapUiResponsiveMargin" width="auto">
+        <headerToolbar>
+          <Toolbar>
+            <Title text="{i18n>appTitle}" class="sapThemeHighlight-asColor"/>
+          </Toolbar>
+        </headerToolbar>
+  
+        <content>
+          <Table items="{employeeModel>/value}">
+            <columns>
+              <Column>
+                <Text text="{i18n>name}"/>
+              </Column>
+              <Column>
+                <Text text="{i18n>location}"/>
+              </Column>
+              <Column>
+                <Text text="{i18n>category}"/>
+              </Column>
+              <Column>
+                <Text text="{i18n>modify}"/>
+              </Column>
+              <Column>
+                <Text text="{i18n>delete}"/>
+              </Column>
+            </columns>
+            <items>
+              <ColumnListItem>
+                <cells>
+                  <Text text="{employeeModel>name}"/>
+                  <Text text="{employeeModel>location/title}"/>
+                  <Text text="{employeeModel>category/title}"/>
+                  <Button icon="sap-icon://edit" press=".onEditPress">
+                    <customData>
+                      <core:CustomData key="employeeId" value="{employeeModel>ID}" />
+                    </customData>
+                  </Button>
+                  <Button icon="sap-icon://delete" press=".onDeletePress">
+                    <customData>
+                      <core:CustomData key="employeeId" value="{employeeModel>ID}" />
+                    </customData>
+                  </Button>
+                </cells>
+              </ColumnListItem>
+            </items>
+          </Table>
+        </content>
+      </Panel>
+      <!-- </content>
         </Page>
       </pages> -->
     </App>
