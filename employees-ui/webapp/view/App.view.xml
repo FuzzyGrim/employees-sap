@@ -8,7 +8,7 @@
         <Page title="{i18n>appTitle}">
           <content> -->
 
-      <Panel class="sapUiResponsiveMargin" width="auto">
+      <Panel expandable="true" expanded="true" class="sapUiResponsiveMargin" width="auto">
         <headerToolbar>
           <Toolbar>
             <Title text="{i18n>appTitle}" class="sapThemeHighlight-asColor"/>
