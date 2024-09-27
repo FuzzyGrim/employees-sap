@@ -29,9 +29,11 @@ sap.ui.define(
           });
       },
 
-      onPress: function() {
+      onPress: function (oEvent) {
         const oRouter = this.getOwnerComponent().getRouter();
-        oRouter.navTo("detail");
+        oRouter.navTo("detail", {
+          employeePath: window.encodeURIComponent(oEvent.getSource().data("employeeId"))
+        });
       },
 
       onDeletePress: function (oEvent) {
@@ -224,9 +226,7 @@ sap.ui.define(
         const aFilter = [];
         const sQuery = oEvent.getParameter("query");
         if (sQuery) {
-          aFilter.push(
-            new Filter("name", FilterOperator.Contains, sQuery)
-          );
+          aFilter.push(new Filter("name", FilterOperator.Contains, sQuery));
         }
 
         // filter binding

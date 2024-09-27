@@ -1,8 +1,7 @@
-<mvc:View
+<mvc:View controllerName="ui5.walkthrough.controller.Detail"
 	xmlns="sap.m"
 	xmlns:mvc="sap.ui.core.mvc">
-	<Page
-		title="{i18n>detailTitle}">
-		<ObjectHeader title="Employee"/>
+	<Page title="{i18n>detailTitle}">
+		<ObjectHeader title="{employee>/name}"/>
 	</Page>
 </mvc:View>
