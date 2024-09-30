@@ -1,6 +1,6 @@
 <core:FragmentDefinition xmlns="sap.m"
   xmlns:core="sap.ui.core">
-  <Dialog id="EmployeeDialog" title="{i18n>dialog-title}">
+  <Dialog id="EmployeeDialog" title="{i18n>dialog-title}" class="sapUiContentPadding">
     <Label text="{i18n>name}" labelFor="input-name"/>
     <Input id="input-name" class="sapUiSmallMarginBottom" required="true" value="{employee>/name}"/>
 
@@ -23,7 +23,7 @@
     <Input id="input-city" class="sapUiSmallMarginBottom" value="{employee>/city}" />
 
     <Label text="{i18n>address}" labelFor="input-address"/>
-    <Input id="input-address" class="sapUiSmallMarginBottom" value="{employee>/address}"/>
+    <Input id="input-address" value="{employee>/address}"/>
 
     <beginButton>
       <Button text="Save" press=".onSaveDialogPress">

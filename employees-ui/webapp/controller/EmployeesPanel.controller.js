@@ -67,7 +67,7 @@ sap.ui.define(
         });
 
         this._oDialog ??= await this.loadFragment({
-          name: "ui5.quickstart.view.EmployeesDialog",
+          name: "ui5.quickstart.view.EmployeeDialog",
         });
         this._oDialog.setModel(new JSONModel(employee), "employee");
         this._oDialog.open();
