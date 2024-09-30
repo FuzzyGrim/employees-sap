@@ -86,6 +86,7 @@ sap.ui.define(
       _updateEmployee: function (employeeId) {
         var oModel = this.getView().getModel("service");
         var updatedData = this._oDialog.getModel("employee").getData();
+        const oBundle = this.getView().getModel("i18n").getResourceBundle();
 
         if (
           !(
@@ -94,10 +95,8 @@ sap.ui.define(
             updatedData.category.title
           )
         ) {
-          return MessageBox.error("Please fill all required fields");
+          return MessageBox.error(oBundle.getText("fill-required"));
         }
-
-        const oBundle = this.getView().getModel("i18n").getResourceBundle();
 
         // Prepare the main employee update data
         var employeeUpdate = {
