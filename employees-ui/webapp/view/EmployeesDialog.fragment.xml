@@ -2,28 +2,28 @@
   xmlns:core="sap.ui.core">
   <Dialog id="EmployeeDialog" title="{i18n>dialog-title}">
     <Label text="{i18n>name}" labelFor="input-name"/>
-    <Input id="input-name" required="true" value="{employee>/name}"/>
+    <Input id="input-name" class="sapUiSmallMarginBottom" required="true" value="{employee>/name}"/>
 
     <Label text="{i18n>location}" labelFor="input-location"/>
-    <Input id="input-location" required="true" value="{employee>/location/title}"/>
+    <Input id="input-location" class="sapUiSmallMarginBottom" required="true" value="{employee>/location/title}"/>
 
     <Label text="{i18n>category}" labelFor="input-category"/>
-    <Input id="input-category" required="true" value="{employee>/category/title}"/>
+    <Input id="input-category" class="sapUiSmallMarginBottom" required="true" value="{employee>/category/title}"/>
 
     <Label text="{i18n>photo}" labelFor="input-photo"/>
-    <Input id="input-photo" type="Url" value="{employee>/photo}"/>
+    <Input id="input-photo" class="sapUiSmallMarginBottom" type="Url" value="{employee>/photo}"/>
 
     <Label text="{i18n>age}" labelFor="input-age"/>
-    <Input id="input-age" type="Number" value="{employee>/age}"/>
+    <Input id="input-age" class="sapUiSmallMarginBottom" type="Number" value="{employee>/age}"/>
 
     <Label text="{i18n>salary}" labelFor="input-salary"/>
-    <Input id="input-salary" type="Number" value="{employee>/salary}"/>
+    <Input id="input-salary" class="sapUiSmallMarginBottom" type="Number" value="{employee>/salary}"/>
 
     <Label text="{i18n>city}" labelFor="input-city"/>
-    <Input id="input-city" value="{employee>/city}" />
+    <Input id="input-city" class="sapUiSmallMarginBottom" value="{employee>/city}" />
 
     <Label text="{i18n>address}" labelFor="input-address"/>
-    <Input id="input-address" value="{employee>/address}"/>
+    <Input id="input-address" class="sapUiSmallMarginBottom" value="{employee>/address}"/>
 
     <beginButton>
       <Button text="Save" press=".onSaveDialogPress">
