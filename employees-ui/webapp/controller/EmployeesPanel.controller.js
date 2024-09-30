@@ -163,7 +163,7 @@ sap.ui.define(
                   {
                     success: (oData) => {
                       this._updateEmployeeMain(oModel, employeeId, {
-                        location_ID: oData.ID,
+                        location_ID: oData.results[0].lastInsertRowid,
                       })
                         .then(resolve)
                         .catch(reject);
@@ -199,7 +199,7 @@ sap.ui.define(
                   {
                     success: (oData) => {
                       this._updateEmployeeMain(oModel, employeeId, {
-                        category_ID: oData.ID,
+                        category_ID: oData.results[0].lastInsertRowid,
                       })
                         .then(resolve)
                         .catch(reject);
