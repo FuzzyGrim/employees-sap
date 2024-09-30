@@ -11,11 +11,11 @@
 
     <content>
       <Table id="employeesTable" items="{
-              path : 'employeeModel>/value',
-              sorter : {
-                  path : 'name' 
-              }
-            }">
+          path: 'service>/Employees',
+          parameters: {
+              expand: 'location,category'
+          }
+      }">
         <headerToolbar>
           <Toolbar>
             <Title text="{i18n>data}"/>
@@ -43,21 +43,21 @@
         <items>
           <ColumnListItem vAlign="Middle" type="Navigation" press=".onPress">
             <customData>
-              <core:CustomData key="employeeId" value="{employeeModel>ID}" />
+              <core:CustomData key="employeeId" value="{service>ID}" />
             </customData>
 
             <cells>
-              <Text text="{employeeModel>name}"/>
-              <Text text="{employeeModel>location/title}"/>
-              <Text text="{employeeModel>category/title}"/>
+              <Text text="{service>name}"/>
+              <Text text="{service>location/title}"/>
+              <Text text="{service>category/title}"/>
               <Button icon="sap-icon://edit" press=".onEditPress">
                 <customData>
-                  <core:CustomData key="employeeId" value="{employeeModel>ID}" />
+                  <core:CustomData key="employeeId" value="{service>ID}" />
                 </customData>
               </Button>
               <Button icon="sap-icon://delete" press=".onDeletePress">
                 <customData>
-                  <core:CustomData key="employeeId" value="{employeeModel>ID}" />
+                  <core:CustomData key="employeeId" value="{service>ID}" />
                 </customData>
               </Button>
             </cells>

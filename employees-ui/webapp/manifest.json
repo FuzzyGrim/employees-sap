@@ -8,7 +8,16 @@
     "type": "application",
     "applicationVersion": {
       "version": "1.0.0"
-    }
+    },
+		"dataSources": {
+      "remoteService": {
+        "uri": "/odata/v2/",
+        "type": "OData",
+        "settings": {
+          "odataVersion": "2.0"
+        }
+      }
+		}
   },
   "sap.ui": {
     "technology": "UI5",
@@ -28,13 +37,16 @@
     },
     "models": {
       "i18n": {
-      "type": "sap.ui.model.resource.ResourceModel",
-      "settings": {
-        "bundleName": "ui5.quickstart.i18n.i18n",
-        "supportedLocales": ["en","es"],
-        "fallbackLocale": "en"
-      }
-      }
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "ui5.quickstart.i18n.i18n",
+          "supportedLocales": ["en","es"],
+          "fallbackLocale": "en"
+        }
+      },
+      "service": {
+				"dataSource": "remoteService"
+			}
     },
     "rootView": {
       "viewName": "ui5.quickstart.view.App",

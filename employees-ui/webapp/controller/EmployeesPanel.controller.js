@@ -10,29 +10,12 @@ sap.ui.define(
     "use strict";
 
     return Controller.extend("ui.quickstart.controller.EmployeesPanel", {
-      onInit: function () {
-        var oModel = new JSONModel();
-        this.getView().setModel(oModel, "employeeModel");
-        this._loadEmployeeData();
-      },
-
-      _loadEmployeeData: function () {
-        var oModel = this.getView().getModel("employeeModel");
-
-        fetch("/odata/v4/Employees?$expand=location,category")
-          .then((res) => res.json())
-          .then((data) => {
-            oModel.setData(data);
-          })
-          .catch((error) => {
-            console.error("Error fetching employee data:", error);
-          });
-      },
-
       onPress: function (oEvent) {
         const oRouter = this.getOwnerComponent().getRouter();
         oRouter.navTo("detail", {
-          employeePath: window.encodeURIComponent(oEvent.getSource().data("employeeId"))
+          employeePath: window.encodeURIComponent(
+            oEvent.getSource().data("employeeId")
+          ),
         });
       },
 
@@ -53,31 +36,35 @@ sap.ui.define(
 
       _deleteEmployee: function (employeeId) {
         const oBundle = this.getView().getModel("i18n").getResourceBundle();
+        var oModel = this.getOwnerComponent().getModel("service");
 
-        fetch(`/odata/v4/Employees(${employeeId})`, {
-          method: "DELETE",
-        })
-          .then((response) => {
-            if (response.ok) {
-              // Refresh the data after successful deletion
-              this._loadEmployeeData();
-              MessageBox.success(oBundle.getText("delete-sucess"));
-            } else {
-              throw new Error("Delete operation failed");
-            }
-          })
-          .catch((error) => {
-            console.error("Error deleting employee:", error);
+        oModel.remove(`/Employees(${encodeURIComponent(employeeId)})`, {
+          success: function () {
+            MessageBox.success(oBundle.getText("delete-sucess"));
+          },
+          error: function () {
             MessageBox.error(oBundle.getText("delete-error"));
-          });
+          },
+        });
       },
 
       onEditPress: async function (oEvent) {
         var employeeId = oEvent.getSource().data("employeeId");
-        var oModel = this.getView().getModel("employeeModel");
-        var employee = oModel
-          .getProperty("/value")
-          .find((e) => e.ID === employeeId);
+        var oModel = this.getView().getModel("service");
+
+        var employee = await new Promise((resolve, reject) => {
+          oModel.read(`/Employees(${employeeId})`, {
+            urlParameters: {
+              $expand: "location,category",
+            },
+            success: function (oData) {
+              resolve(oData);
+            },
+            error: function (oError) {
+              reject(oError);
+            },
+          });
+        });
 
         this._oDialog ??= await this.loadFragment({
           name: "ui5.quickstart.view.EmployeesDialog",
@@ -97,11 +84,22 @@ sap.ui.define(
       },
 
       _updateEmployee: function (employeeId) {
-        var oModel = this._oDialog.getModel();
-        var updatedData = oModel.getData();
+        var oModel = this.getView().getModel("service");
+        var updatedData = this._oDialog.getModel("employee").getData();
+
+        if (
+          !(
+            updatedData.name &&
+            updatedData.location.title &&
+            updatedData.category.title
+          )
+        ) {
+          return MessageBox.error("Please fill all required fields");
+        }
+
         const oBundle = this.getView().getModel("i18n").getResourceBundle();
 
-        // Prepare the main employee update
+        // Prepare the main employee update data
         var employeeUpdate = {
           name: updatedData.name,
           photo: updatedData.photo,
@@ -111,28 +109,23 @@ sap.ui.define(
           address: updatedData.address,
         };
 
-        // Start with updating the employee
-        this._updateEmployeeMain(employeeId, employeeUpdate)
+        // Perform the update chain: main data, then location, then category
+        this._updateEmployeeMain(oModel, employeeId, employeeUpdate)
           .then(() => {
-            // If location changed, update or create new location
-            if (updatedData.location && updatedData.location.title) {
-              return this._updateOrCreateLocation(
-                employeeId,
-                updatedData.location.title
-              );
-            }
+            return this._updateOrCreateLocation(
+              oModel,
+              employeeId,
+              updatedData.location.title
+            );
           })
           .then(() => {
-            // If category changed, update or create new category
-            if (updatedData.category && updatedData.category.title) {
-              return this._updateOrCreateCategory(
-                employeeId,
-                updatedData.category.title
-              );
-            }
+            return this._updateOrCreateCategory(
+              oModel,
+              employeeId,
+              updatedData.category.title
+            );
           })
           .then(() => {
-            this._loadEmployeeData();
             MessageBox.success(oBundle.getText("modify-sucess"));
           })
           .catch((error) => {
@@ -141,84 +134,85 @@ sap.ui.define(
           });
       },
 
-      _updateEmployeeMain: function (employeeId, data) {
-        return fetch(`/odata/v4/Employees(${employeeId})`, {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        }).then((response) => {
-          if (!response.ok) throw new Error("Update operation failed");
+      _updateEmployeeMain: function (oModel, employeeId, data) {
+        return new Promise((resolve, reject) => {
+          oModel.update(`/Employees(${employeeId})`, data, {
+            success: resolve,
+            error: reject,
+          });
         });
       },
 
-      _updateOrCreateLocation: function (employeeId, locationTitle) {
-        // First, search for existing location with the same title
-        return fetch(
-          `/odata/v4/Locations?$filter=title eq '${encodeURIComponent(
-            locationTitle
-          )}'`
-        )
-          .then((response) => response.json())
-          .then((data) => {
-            if (data.value && data.value.length > 0) {
-              // Location exists, use its ID
-              return this._updateEmployeeMain(employeeId, {
-                location_ID: data.value[0].ID,
-              });
-            } else {
-              // Location doesn't exist, create new one
-              return fetch("/odata/v4/Locations", {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ title: locationTitle }),
-              })
-                .then((response) => response.json())
-                .then((data) => {
-                  // Link new location to employee
-                  return this._updateEmployeeMain(employeeId, {
-                    location_ID: data.results[0].lastInsertRowid,
-                  });
-                });
-            }
+      _updateOrCreateLocation: function (oModel, employeeId, locationTitle) {
+        return new Promise((resolve, reject) => {
+          oModel.read("/Locations", {
+            urlParameters: {
+              $filter: `title eq '${encodeURIComponent(locationTitle)}'`,
+            },
+            success: (oData) => {
+              // If location exists
+              if (oData.results && oData.results.length > 0) {
+                this._updateEmployeeMain(oModel, employeeId, {
+                  location_ID: oData.results[0].ID,
+                })
+                  .then(resolve)
+                  .catch(reject);
+              } else {
+                oModel.create(
+                  "/Locations",
+                  { title: locationTitle },
+                  {
+                    success: (oData) => {
+                      this._updateEmployeeMain(oModel, employeeId, {
+                        location_ID: oData.ID,
+                      })
+                        .then(resolve)
+                        .catch(reject);
+                    },
+                    error: reject,
+                  }
+                );
+              }
+            },
+            error: reject,
           });
+        });
       },
 
-      _updateOrCreateCategory: function (employeeId, categoryTitle) {
-        // First, search for existing category with the same title
-        return fetch(
-          `/odata/v4/Categories?$filter=title eq '${encodeURIComponent(
-            categoryTitle
-          )}'`
-        )
-          .then((response) => response.json())
-          .then((data) => {
-            if (data.value && data.value.length > 0) {
-              // Category exists, use its ID
-              return this._updateEmployeeMain(employeeId, {
-                category_ID: data.value[0].ID,
-              });
-            } else {
-              // Category doesn't exist, create new one
-              return fetch("/odata/v4/Categories", {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ title: categoryTitle }),
-              })
-                .then((response) => response.json())
-                .then((data) => {
-                  // Link new category to employee
-                  return this._updateEmployeeMain(employeeId, {
-                    category_ID: data.results[0].lastInsertRowid,
-                  });
-                });
-            }
+      _updateOrCreateCategory: function (oModel, employeeId, categoryTitle) {
+        return new Promise((resolve, reject) => {
+          oModel.read("/Categories", {
+            urlParameters: {
+              $filter: `title eq '${encodeURIComponent(categoryTitle)}'`,
+            },
+            success: (oData) => {
+              if (oData.results && oData.results.length > 0) {
+                // If category exists
+                this._updateEmployeeMain(oModel, employeeId, {
+                  category_ID: oData.results[0].ID,
+                })
+                  .then(resolve)
+                  .catch(reject);
+              } else {
+                oModel.create(
+                  "/Categories",
+                  { title: categoryTitle },
+                  {
+                    success: (oData) => {
+                      this._updateEmployeeMain(oModel, employeeId, {
+                        category_ID: oData.ID,
+                      })
+                        .then(resolve)
+                        .catch(reject);
+                    },
+                    error: reject,
+                  }
+                );
+              }
+            },
+            error: reject,
           });
+        });
       },
 
       onFilterEmployees: function (oEvent) {

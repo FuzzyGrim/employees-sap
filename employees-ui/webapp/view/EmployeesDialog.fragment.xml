@@ -28,7 +28,7 @@
     <beginButton>
       <Button text="Save" press=".onSaveDialogPress">
         <customData>
-          <core:CustomData key="employeeId" value="{/ID}" />
+          <core:CustomData key="employeeId" value="{employee>/ID}" />
         </customData>
       </Button>
     </beginButton>
