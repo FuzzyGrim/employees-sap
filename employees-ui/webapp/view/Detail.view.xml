@@ -1,7 +1,20 @@
-<mvc:View controllerName="ui5.walkthrough.controller.Detail"
-	xmlns="sap.m"
-	xmlns:mvc="sap.ui.core.mvc">
-	<Page title="{i18n>detailTitle}">
-		<ObjectHeader title="{employee>/name}"/>
-	</Page>
+<mvc:View controllerName="ui5.quickstart.controller.Detail"
+  xmlns="sap.m"
+  xmlns:mvc="sap.ui.core.mvc">
+  <Page title="{i18n>detailTitle}" showNavButton="true" navButtonPress=".onNavBack">
+
+    <Panel class="sapUiResponsiveMargin" width="auto">
+      <content>
+        <ObjectHeader title="{employee>/name}" class="sapUiResponsivePadding--header">
+          <ObjectAttribute title="{i18n>location}" text="{employee>/location/title}" />
+          <ObjectAttribute title="{i18n>category}" text="{employee>/category/title}" />
+          <ObjectAttribute title="{i18n>photo}" text="{employee>/photo}" />
+          <ObjectAttribute title="{i18n>age}" text="{employee>/age}" />
+          <ObjectAttribute title="{i18n>salary}" text="{employee>/salary}" />
+          <ObjectAttribute title="{i18n>city}" text="{employee>/city}" />
+          <ObjectAttribute title="{i18n>address}" text="{employee>/address}" />
+        </ObjectHeader>
+      </content>
+    </Panel>
+  </Page>
 </mvc:View>

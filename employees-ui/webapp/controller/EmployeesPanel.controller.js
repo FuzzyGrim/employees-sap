@@ -5,18 +5,24 @@ sap.ui.define(
     "sap/m/MessageBox",
     "sap/ui/model/Filter",
     "sap/ui/model/FilterOperator",
-    "./ODataService"
+    "./ODataService",
   ],
-  function (Controller, JSONModel, MessageBox, Filter, FilterOperator, ODataService) {
+  function (
+    Controller,
+    JSONModel,
+    MessageBox,
+    Filter,
+    FilterOperator,
+    ODataService
+  ) {
     "use strict";
 
     return Controller.extend("ui.quickstart.controller.EmployeesPanel", {
       onPress: function (oEvent) {
         const oRouter = this.getOwnerComponent().getRouter();
+        const employeeId = oEvent.getSource().data("employeeId");
         oRouter.navTo("detail", {
-          employeePath: window.encodeURIComponent(
-            oEvent.getSource().data("employeeId")
-          ),
+          employeeId: employeeId,
         });
       },
 
@@ -29,7 +35,7 @@ sap.ui.define(
           title: oBundle.getText("delete-title"),
           onClose: function (oAction) {
             if (oAction === MessageBox.Action.OK) {
-              ODataService.deleteEmployee(oModel, oBundle, employeeId)
+              ODataService.deleteEmployee(oModel, oBundle, employeeId);
             }
           },
         });
@@ -56,7 +62,7 @@ sap.ui.define(
         var oModel = this.getView().getModel("service");
         var updatedData = this._oDialog.getModel("employee").getData();
         const oBundle = this.getView().getModel("i18n").getResourceBundle();
-  
+
         ODataService.updateEmployee(oModel, oBundle, updatedData, employeeId);
         this._oDialog.close();
       },
