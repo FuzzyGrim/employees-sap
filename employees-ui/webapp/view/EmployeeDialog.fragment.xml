@@ -1,6 +1,6 @@
 <core:FragmentDefinition xmlns="sap.m"
   xmlns:core="sap.ui.core">
-  <Dialog id="EmployeeDialog" title="{i18n>dialog-title}" class="sapUiContentPadding">
+  <Dialog id="EmployeeDialog" title="{= ${employee>/ID} ? ${i18n>editTitle} : ${i18n>createTitle} }" class="sapUiContentPadding">
     <Label text="{i18n>name}" labelFor="input-name"/>
     <Input id="input-name" class="sapUiSmallMarginBottom" required="true" value="{employee>/name}"/>
 

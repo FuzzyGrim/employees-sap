@@ -21,6 +21,8 @@
             <Title text="{i18n>data}"/>
             <ToolbarSpacer/>
             <SearchField width="50%" search=".onFilterEmployees" showRefreshButton="true"/>
+            <ToolbarSpacer/>
+            <Button text="{i18n>createEmployee}" press=".onCreatePress" type="Transparent" />
           </Toolbar>
         </headerToolbar>
         <columns>
