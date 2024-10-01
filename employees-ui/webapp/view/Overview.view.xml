@@ -1,7 +1,7 @@
 <mvc:View controllerName="ui5.quickstart.controller.App"
   xmlns="sap.m"
   xmlns:mvc="sap.ui.core.mvc" displayBlock="true">
-  <Page title="{i18n>homeTitle}">
+  <Page title="{i18n>homeTitle}" titleAlignment="Center">
     <content>
       <mvc:XMLView viewName="ui5.quickstart.view.EmployeesPanel"/>
     </content>
