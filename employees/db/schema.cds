@@ -2,9 +2,9 @@ namespace my.employees;
 
 entity Employees {
   key ID       : Integer;
-      name     : localized String;
-      location : Association to Locations;
-      category : Association to Categories;
+      name     : localized String not null;
+      location : Association to Locations not null;
+      category : Association to Categories not null;
       photo    : String;
       age      : UInt8;
       salary   : Integer;
@@ -15,7 +15,7 @@ entity Employees {
 @assert.unique: {isbn: [title]}
 entity Locations {
   key ID        : Integer;
-      title     : localized String;
+      title     : localized String not null;
       employees : Association to many Employees
                     on employees.location = $self;
 }
@@ -23,7 +23,7 @@ entity Locations {
 @assert.unique: {isbn: [title]}
 entity Categories {
   key ID        : Integer;
-      title     : localized String;
+      title     : localized String not null;
       employees : Association to many Employees
                     on employees.category = $self;
 }
