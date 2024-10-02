@@ -54,49 +54,38 @@ sap.ui.define(["sap/m/MessageBox"], function (MessageBox) {
       });
     },
 
-    updateEmployee: function (oModel, oBundle, updatedData, employeeId) {
+    updateEmployee: async function (oModel, oBundle, data, employeeId) {
+      const locationId = await this.getOrCreateLocation(
+        oModel,
+        data.location.title
+      );
+      const categoryId = await this.getOrCreateCategory(
+        oModel,
+        data.category.title
+      );
+
       // Prepare the main employee update data
-      var employeeUpdate = {
-        name: updatedData.name,
-        photo: updatedData.photo,
-        age: updatedData.age,
-        salary: updatedData.salary,
-        city: updatedData.city,
-        address: updatedData.address,
+      const employeeData = {
+        name: data.name,
+        photo: data.photo,
+        age: data.age,
+        salary: data.salary,
+        city: data.city,
+        address: data.address,
+        location_ID: locationId,
+        category_ID: categoryId,
       };
 
-      // Perform the update chain: main data, then location, then category
-      this.updateEmployeeMain(oModel, employeeId, employeeUpdate)
-        .then(() => {
-          return this.getOrCreateLocation(oModel, updatedData.location.title);
-        })
-        .then((locationId) => {
-          return this.updateEmployeeMain(oModel, employeeId, {
-            location_ID: locationId,
-          });
-        })
-        .then(() => {
-          return this.getOrCreateCategory(oModel, updatedData.category.title);
-        })
-        .then((categoryId) => {
-          return this.updateEmployeeMain(oModel, employeeId, {
-            category_ID: categoryId,
-          });
-        })
-        .then(() => {
-          MessageBox.success(oBundle.getText("modify-sucess"));
-        })
-        .catch((error) => {
-          console.error("Error updating employee:", error);
-          MessageBox.error(oBundle.getText("modify-error"));
-        });
-    },
-
-    updateEmployeeMain: function (oModel, employeeId, data) {
       return new Promise((resolve, reject) => {
-        oModel.update(`/Employees(${employeeId})`, data, {
-          success: resolve,
-          error: reject,
+        oModel.update(`/Employees(${employeeId})`, employeeData, {
+          success: function () {
+            MessageBox.success(oBundle.getText("modify-sucess"));
+            resolve();
+          },
+          error: function (oError) {
+            MessageBox.error(oBundle.getText("modify-error"));
+            reject(oError);
+          },
         });
       });
     },
