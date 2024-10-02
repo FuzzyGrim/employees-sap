@@ -105,7 +105,14 @@ sap.ui.define(
         const aFilter = [];
         const sQuery = oEvent.getParameter("query");
         if (sQuery) {
-          aFilter.push(new Filter("name", FilterOperator.Contains, sQuery));
+          aFilter.push(new Filter({
+            filters: [
+              new Filter("name", FilterOperator.Contains, sQuery),
+              new Filter("location/title", FilterOperator.Contains, sQuery),
+              new Filter("category/title", FilterOperator.Contains, sQuery)
+            ],
+            and: false
+          }));
         }
 
         // filter binding
