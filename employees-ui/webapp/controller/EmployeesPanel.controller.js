@@ -100,25 +100,50 @@ sap.ui.define(
         });
       },
 
-      onFilterEmployees: function (oEvent) {
-        // build filter array
-        const aFilter = [];
-        const sQuery = oEvent.getParameter("query");
+      onFilter: function () {
+        const aFilters = this._getSelectionFilters();
+
+        // add search filter to the existing filters
+        const sQuery = this.byId("searchFilter").getValue();
         if (sQuery) {
-          aFilter.push(new Filter({
-            filters: [
-              new Filter("name", FilterOperator.Contains, sQuery),
-              new Filter("location/title", FilterOperator.Contains, sQuery),
-              new Filter("category/title", FilterOperator.Contains, sQuery)
-            ],
-            and: false
-          }));
+          aFilters.push(
+            new Filter({
+              filters: [
+                new Filter("name", FilterOperator.Contains, sQuery),
+                new Filter("location/title", FilterOperator.Contains, sQuery),
+                new Filter("category/title", FilterOperator.Contains, sQuery),
+              ],
+              and: false,
+            })
+          );
         }
 
-        // filter binding
-        const oList = this.byId("employeesTable");
-        const oBinding = oList.getBinding("items");
-        oBinding.filter(aFilter);
+        const oTable = this.byId("employeesTable");
+        const oBinding = oTable.getBinding("items");
+        oBinding.filter(aFilters);
+      },
+
+      _getSelectionFilters: function () {
+        const aFilters = [];
+
+        var aLocationKeys = this.byId("locationFilter").getSelectedKeys();
+        var aCategoryKeys = this.byId("categoryFilter").getSelectedKeys();
+
+        if (aLocationKeys.length > 0) {
+          var aLocationFilters = aLocationKeys.map(function (sKey) {
+            return new Filter("location_ID", FilterOperator.EQ, sKey);
+          });
+          aFilters.push(new Filter(aLocationFilters, false)); // false means OR
+        }
+
+        if (aCategoryKeys.length > 0) {
+          var aCategoryFilters = aCategoryKeys.map(function (sKey) {
+            return new Filter("category_ID", FilterOperator.EQ, sKey);
+          });
+          aFilters.push(new Filter(aCategoryFilters, false)); // false means OR
+        }
+
+        return aFilters;
       },
     });
   }
