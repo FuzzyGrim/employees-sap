@@ -145,6 +145,13 @@ sap.ui.define(
 
         return aFilters;
       },
+
+      onResetFilters: function () {
+        this.byId("locationFilter").setSelectedKeys([]);
+        this.byId("categoryFilter").setSelectedKeys([]);
+        this.byId("searchFilter").setValue("");
+        this.onFilter();
+      },
     });
   }
 );

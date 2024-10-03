@@ -11,7 +11,7 @@
 
     <content>
 
-      <HBox alignItems="Center" justifyContent="Center" class="sapUiMediumMarginTopBottom">
+      <HBox alignItems="Stretch" justifyContent="Center" class="sapUiMediumMarginTopBottom">
         <VBox alignItems="Center" class="sapUiSmallMarginEnd">
           <Title text="{i18n>search}" textAlign="Center" class="sapUiTinyMarginBottom"/>
           <SearchField id="searchFilter" search=".onFilter" />
@@ -26,7 +26,8 @@
             <core:Item key="{service>ID}" text="{service>title}" />
           </MultiComboBox>
         </VBox>
-        <VBox alignItems="Center">
+
+        <VBox alignItems="Center" class="sapUiSmallMarginEnd">
           <Title text="{i18n>categories}" textAlign="Center" class="sapUiTinyMarginBottom"/>
           <MultiComboBox id="categoryFilter" showClearIcon="true" showSelectAll="true" selectionChange=".onFilter" items="{
             path: 'service>/Categories',
@@ -34,6 +35,10 @@
           }">
             <core:Item key="{service>ID}" text="{service>title}" />
           </MultiComboBox>
+        </VBox>
+
+        <VBox alignItems="Center" justifyContent="End">
+          <Button icon="sap-icon://reset" press=".onResetFilters" />
         </VBox>
       </HBox>
 
@@ -48,6 +53,7 @@
             <Title text="{i18n>data}"/>
             <ToolbarSpacer/>
             <Button text="{i18n>createEmployee}" press=".onCreatePress" type="Transparent" />
+            <Button icon="sap-icon://synchronize" text="{i18n>refresh}" press=".onRefreshPress" type="Transparent" />
           </Toolbar>
         </headerToolbar>
         <columns>
