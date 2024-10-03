@@ -13,6 +13,11 @@
 
       <HBox alignItems="Center" justifyContent="Center" class="sapUiMediumMarginTopBottom">
         <VBox alignItems="Center" class="sapUiSmallMarginEnd">
+          <Title text="{i18n>search}" textAlign="Center" class="sapUiTinyMarginBottom"/>
+          <SearchField id="searchFilter" search=".onFilter" />
+        </VBox>
+
+        <VBox alignItems="Center" class="sapUiSmallMarginEnd">
           <Title text="{i18n>locations}" textAlign="Center" class="sapUiTinyMarginBottom"/>
           <MultiComboBox id="locationFilter" showClearIcon="true" showSelectAll="true" selectionChange=".onFilter" items="{
             path: 'service>/Locations',
@@ -41,8 +46,6 @@
         <headerToolbar>
           <Toolbar>
             <Title text="{i18n>data}"/>
-            <ToolbarSpacer/>
-            <SearchField id="searchFilter" width="50%" search=".onFilter" showRefreshButton="true"/>
             <ToolbarSpacer/>
             <Button text="{i18n>createEmployee}" press=".onCreatePress" type="Transparent" />
           </Toolbar>
