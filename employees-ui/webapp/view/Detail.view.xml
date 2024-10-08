@@ -1,20 +1,35 @@
 <mvc:View controllerName="ui5.quickstart.controller.Detail"
-  xmlns="sap.m"
-  xmlns:mvc="sap.ui.core.mvc">
-  <Page title="{i18n>detailTitle}" titleAlignment="Center" showNavButton="true" navButtonPress=".onNavBack">
+    xmlns="sap.m"
+    xmlns:mvc="sap.ui.core.mvc">
 
-    <Panel class="sapUiResponsiveMargin" width="auto">
-      <content>
-        <ObjectHeader title="{employee>/name}" class="sapUiResponsivePadding--header">
-          <ObjectAttribute title="{i18n>location}" text="{employee>/location/title}" />
-          <ObjectAttribute title="{i18n>category}" text="{employee>/category/title}" />
-          <ObjectAttribute title="{i18n>photo}" text="{employee>/photo}" />
-          <ObjectAttribute title="{i18n>age}" text="{employee>/age}" />
-          <ObjectAttribute title="{i18n>salary}" text="{employee>/salary}" />
-          <ObjectAttribute title="{i18n>city}" text="{employee>/city}" />
-          <ObjectAttribute title="{i18n>address}" text="{employee>/address}" />
-        </ObjectHeader>
-      </content>
-    </Panel>
-  </Page>
+    <Page title="{i18n>detailTitle}" titleAlignment="Center" showNavButton="true" navButtonPress=".onNavBack">
+        <Panel class="sapUiResponsiveMargin" width="auto">
+            <HBox class="sapUiMediumMarginTop sapUiMediumMarginBegin">
+                <!-- Left side: Image, Name, Category -->
+                <VBox width="200px" alignItems="Center">
+                    <Image src="{= ${employee>/photo} === '' ? ${employee>/photo} : 'https://images.unsplash.com/photo-1532630571098-79a3d222b00d'}" width="200px" height="200px" class="objectFitCover"/>
+                    <Text text="{employee>/name}" class="sapUiTinyMarginTop employeeName" wrapping="false"/>
+                    <Text text="{employee>/category/title}" class="employeeCategory" wrapping="false"/>
+                </VBox>
+
+                <!-- Right side: Other details -->
+                <VBox class="sapUiMediumMarginBegin">
+                    <Label text="Location"/>
+                    <Text text="{employee>/location/title}" class="sapUiSmallMarginBottom"/>
+
+                    <Label text="Age"/>
+                    <Text text="{employee>/age}" class="sapUiSmallMarginBottom"/>
+
+                    <Label text="Salary"/>
+                    <Text text="{employee>/salary}" class="sapUiSmallMarginBottom"/>
+
+                    <Label text="City"/>
+                    <Text text="{employee>/city}" class="sapUiSmallMarginBottom"/>
+
+                    <Label text="Address"/>
+                    <Text text="{employee>/address}"/>
+                </VBox>
+            </HBox>
+        </Panel>
+    </Page>
 </mvc:View>

@@ -10,3 +10,16 @@
 .sapMObjectAttributeTitle {
     font-weight: bold !important;
 }
+
+.app .objectFitCover {
+    object-fit: cover;
+}
+
+.app .employeeName {
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+.app .employeeCategory {
+    font-size: 1rem;
+}
