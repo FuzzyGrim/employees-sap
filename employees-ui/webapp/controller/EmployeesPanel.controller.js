@@ -35,7 +35,7 @@ sap.ui.define(
         });
 
         // Set up a new empty employee model for creation
-        let oEmployeeModel = new JSONModel({
+        const oEmployeeModel = new JSONModel({
           name: "",
           location: { title: "" },
           category: { title: "" },
@@ -52,9 +52,9 @@ sap.ui.define(
 
       onEditPress: async function (oEvent) {
         this._dialogMode = "edit";
-        var employeeId = oEvent.getSource().data("employeeId");
-        var oModel = this.getView().getModel("service");
-        var employee = await ODataService.getEmployeeById(oModel, employeeId);
+        const employeeId = oEvent.getSource().data("employeeId");
+        const oModel = this.getView().getModel("service");
+        const employee = await ODataService.getEmployeeById(oModel, employeeId);
 
         this._oDialog ??= await this.loadFragment({
           name: "ui5.quickstart.view.EmployeeDialog",
@@ -68,9 +68,9 @@ sap.ui.define(
       },
 
       onSaveDialogPress: function (oEvent) {
-        var employeeId = oEvent.getSource().data("employeeId");
-        var oModel = this.getView().getModel("service");
-        var data = this._oDialog.getModel("employee").getData();
+        const employeeId = oEvent.getSource().data("employeeId");
+        const oModel = this.getView().getModel("service");
+        const data = this._oDialog.getModel("employee").getData();
         const oBundle = this.getView().getModel("i18n").getResourceBundle();
 
         if (data.name && data.location.title && data.category.title) {
@@ -86,9 +86,9 @@ sap.ui.define(
       },
 
       onDeletePress: function (oEvent) {
-        var employeeId = oEvent.getSource().data("employeeId");
+        const employeeId = oEvent.getSource().data("employeeId");
         const oBundle = this.getView().getModel("i18n").getResourceBundle();
-        var oModel = this.getView().getModel("service");
+        const oModel = this.getView().getModel("service");
 
         MessageBox.confirm(oBundle.getText("delete-confirm"), {
           title: oBundle.getText("delete-title"),
@@ -126,18 +126,18 @@ sap.ui.define(
       _getSelectionFilters: function () {
         const aFilters = [];
 
-        var aLocationKeys = this.byId("locationFilter").getSelectedKeys();
-        var aCategoryKeys = this.byId("categoryFilter").getSelectedKeys();
+        const aLocationKeys = this.byId("locationFilter").getSelectedKeys();
+        const aCategoryKeys = this.byId("categoryFilter").getSelectedKeys();
 
         if (aLocationKeys.length > 0) {
-          var aLocationFilters = aLocationKeys.map(function (sKey) {
+          const aLocationFilters = aLocationKeys.map(function (sKey) {
             return new Filter("location_ID", FilterOperator.EQ, sKey);
           });
           aFilters.push(new Filter(aLocationFilters, false)); // false means OR
         }
 
         if (aCategoryKeys.length > 0) {
-          var aCategoryFilters = aCategoryKeys.map(function (sKey) {
+          const aCategoryFilters = aCategoryKeys.map(function (sKey) {
             return new Filter("category_ID", FilterOperator.EQ, sKey);
           });
           aFilters.push(new Filter(aCategoryFilters, false)); // false means OR

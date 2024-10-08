@@ -29,7 +29,7 @@ sap.ui.define(["sap/m/MessageBox"], function (MessageBox) {
       );
 
       // Now prepare the employee data
-      let employeeData = {
+      const employeeData = {
         name: data.name,
         photo: data.photo,
         age: data.age,
