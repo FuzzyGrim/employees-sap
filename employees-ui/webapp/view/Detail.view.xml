@@ -7,7 +7,7 @@
             <HBox class="sapUiMediumMarginTop sapUiMediumMarginBegin">
                 <!-- Left side: Image, Name, Category -->
                 <VBox width="200px" alignItems="Center">
-                    <Image src="{= ${employee>/photo} === null ? 'https://images.unsplash.com/photo-1532630571098-79a3d222b00d' : ${employee>/photo} }" width="200px" height="200px" class="objectFitCover"/>
+                    <Image src="{= ${employee>/photo} === null || ${employee>/photo} === '' ? 'https://images.unsplash.com/photo-1532630571098-79a3d222b00d' : ${employee>/photo} }" width="200px" height="200px" class="objectFitCover"/>
                     <Text text="{employee>/name}" class="sapUiTinyMarginTop employeeName" wrapping="false"/>
                     <Text text="{employee>/category/title}" class="employeeCategory" wrapping="false"/>
                 </VBox>
